@@ -1,0 +1,32 @@
+crds:
+  enabled: true
+kubeScheduler:
+  serviceMonitor:
+    insecureSkipVerify: true
+kubeEtcd:
+  tlsConfig:
+    insecureSkipVerify: true
+kubeApiServer:
+  tlsConfig:
+    insecureSkipVerify: true
+grafana:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - grafana.ganba.local
+prometheus:
+  prometheusSpec:
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: local-path
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - prometheus.ganba.local

@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-blue-svc
+  namespace: nginx-blue
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-blue-config
+  namespace: nginx-blue
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Blue Deployment</title>
+      <style>
+      body {
+        background-color: blue;
+      }
+      </style>
+    </head>
+    <body>
+      <h1>Blue Deployment</h1>
+    </body>
+    </html>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-blue-deployment
+  namespace: nginx-blue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /usr/share/nginx/html/index.html
+              subPath: index.html
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-blue-config

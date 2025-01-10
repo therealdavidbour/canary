@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: green-bg-switch-service
+  namespace: canary-bg-switch
+spec:
+  type: ExternalName
+  externalName: nginx-green-svc.nginx-green.svc.cluster.local

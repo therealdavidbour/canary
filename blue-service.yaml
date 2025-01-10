@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: blue-bg-switch-service
+  namespace: canary-bg-switch
+spec:
+  type: ExternalName
+  externalName: nginx-blue-svc.nginx-blue.svc.cluster.local
