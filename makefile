@@ -48,14 +48,15 @@ green:
 
 .PHONY: canary
 canary:
-	helm upgrade --install \
-				 --namespace canary \
-				 --create-namespace \
-				 green-canary ./green-nginx
-	helm upgrade --install \
-				 --namespace canary \
-				 --create-namespace \
-				 blue-canary ./blue-nginx
+	kubectl create ns nginx-blue || true && \
+	kubectl create ns nginx-green || true && \
+	kubectl create ns canary-bg-switch || true && \
+	kubectl apply -f blue-ingress.yaml || true && \
+	kubectl apply -f green-ingress.yaml || true && \
+	kubectl apply -f blue-app.yaml || true && \
+	kubectl apply -f green-app.yaml || true && \
+	kubectl apply -f green-service.yaml || true && \
+	kubectl apply -f blue-service.yaml || true
 
 .PHONY: clean
 clean:
